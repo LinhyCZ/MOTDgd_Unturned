@@ -23,8 +23,6 @@ C:\Users\Tomáš\Documents\Visual Studio 2013\Projects\MOTDgd\MOTDgd\bin\Debug\S
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\MOTDgd.dll.config
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\MOTDgd.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\MOTDgd.pdb
-C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\System.Threading.Tasks.NET35.pdb
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\obj\Debug\MOTDgd.csprojResolveAssemblyReference.cache
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\obj\Debug\MOTDgd.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\obj\Debug\MOTDgd.pdb
@@ -34,3 +32,8 @@ C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\Rocket.API.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\Rocket.Core.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\Rocket.Unturned.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\UnityEngine.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\EngineIoClientDotNet.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\SocketIoClientDotNet.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\System.Threading.Tasks.NET35.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\WebSocket4Net.dll
