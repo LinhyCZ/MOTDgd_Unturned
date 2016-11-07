@@ -63,7 +63,7 @@ namespace MOTDgd
             socket.On("connect", () =>
             {
                 Rocket.Core.Logging.Logger.Log("Connected to HUB");
-                socket.Emit("login", new object[] { Configuration.Instance.User_ID, SDG.Unturned.Provider.ip, SDG.Unturned.Provider.ServerPort, SDG.Unturned.Provider.APP_VERSION, mod_name, P_version, "unturned" });
+                socket.Emit("login", new object[] { Configuration.Instance.User_ID, SDG.Unturned.Provider.ip, SDG.Unturned.Provider.port, SDG.Unturned.Provider.APP_VERSION, mod_name, P_version, "unturned" });
                 Connected = true;
             });
 
