@@ -1,0 +1,12 @@
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\obj\Release\MOTDgd.csprojResolveAssemblyReference.cache
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\MOTDgd.dll.config
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\MOTDgd.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\MOTDgd.pdb
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\Assembly-CSharp-firstpass.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\Assembly-CSharp.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\Rocket.API.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\Rocket.Core.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\Rocket.Unturned.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\UnityEngine.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\obj\Release\MOTDgd.dll
+C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\obj\Release\MOTDgd.pdb
