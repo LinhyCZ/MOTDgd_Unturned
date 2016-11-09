@@ -299,4 +299,181 @@ namespace MOTDgd
             }
         }
     }
+
+
+    class CommandSetRewardMode : IRocketCommand
+    {
+        public AllowedCaller AllowedCaller
+        {
+            get { return AllowedCaller.Both; }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "setmode";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Set the reward mode until server restart, (to make a permanent change you need to alter the physical config file).";
+            }
+        }
+
+        public List<string> Aliases
+        {
+            get
+            {
+                return new List<string>() { };
+            }
+        }
+
+        public string Syntax
+        {
+            get
+            {
+                return "setmode <ALL | SEQUENTIAL | RANDOM | WEIGHTED>";
+            }
+        }
+
+        public List<string> Permissions
+        {
+            get
+            {
+                return new List<string>() { "setmode" };
+            }
+        }
+
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer player = (UnturnedPlayer)caller;
+            if (command.Length == 1)
+            {
+                switch (command[0].ToLower())
+                {
+                    case "all":
+                        Main.reward_mode = "all";
+                        break;
+                    case "sequential":
+                        Main.reward_mode = "sequential";
+                        break;
+                    case "weighted":
+                        Main.reward_mode = "weighted";
+                        break;
+                    case "random":
+                        Main.reward_mode = "random";
+                        break;
+                    default:
+                        if (caller == null)
+                        {
+                            Rocket.Core.Logging.Logger.Log("Didn't recognize " + command[0] + " as valid reward mode.");
+                        }
+                        else
+                        {
+                            UnturnedChat.Say(player, "Didn't recognize " + command[0] + " as valid reward mode.");
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                if (caller == null)
+                {
+                    Rocket.Core.Logging.Logger.Log("Wrong syntax of command");
+                }
+                else
+                {
+                    UnturnedChat.Say(player, "Wrong syntax of command");
+                }
+            }
+        }
+    }
+
+    class CommandGiveReward : IRocketCommand
+    {
+        public AllowedCaller AllowedCaller
+        {
+            get { return AllowedCaller.Both; }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "givereward";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Give the player a reward manually.";
+            }
+        }
+
+        public List<string> Aliases
+        {
+            get
+            {
+                return new List<string>() { };
+            }
+        }
+
+        public string Syntax
+        {
+            get
+            {
+                return "givereward <player>";
+            }
+        }
+
+        public List<string> Permissions
+        {
+            get
+            {
+                return new List<string>() { "givereward" };
+            }
+        }
+
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer player = (UnturnedPlayer)caller;
+            if (command.Length == 1)
+            {
+                UnturnedPlayer rew_player = UnturnedPlayer.FromName(command[0]);
+                if (rew_player != null)
+                {
+                    Main inst = new Main();
+                    inst.GiveReward(rew_player);
+                }
+                else
+                {
+                    if (caller == null)
+                    {
+                        Rocket.Core.Logging.Logger.Log("Cannot find player with name " + command[0]);
+                    }
+                    else
+                    {
+                        UnturnedChat.Say(player, "Cannot find player with name " + command[0]);
+                    }
+                }
+            }
+            else
+            {
+                if (caller == null)
+                {
+                    Rocket.Core.Logging.Logger.Log("Wrong syntax of command");
+                }
+                else
+                {
+                    UnturnedChat.Say(player, "Wrong syntax of command");
+                }
+            }
+        }
+    }
 }

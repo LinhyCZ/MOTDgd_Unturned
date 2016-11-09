@@ -41,6 +41,7 @@ namespace MOTDgd
         public static bool reapply_join;
         public static bool vid_unavailable;
         public static bool advanced_logging;
+        public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
         private static string P_version = "2.0.0";
         private Timer cooldownTimer;
@@ -80,6 +81,7 @@ namespace MOTDgd
             {
                 string resp_data = arguments + "";
                 UnturnedPlayer currentPlayer = getPlayer(resp_data);
+
                 if (currentPlayer != null)
                 {
                     if (Request_players.Contains(currentPlayer.CSteamID))
@@ -303,7 +305,7 @@ namespace MOTDgd
         //Give Reward
         public void GiveReward(UnturnedPlayer player)
         {
-            switch (Configuration.Instance.Reward_mode.ToLower().Replace(" ", ""))
+            switch (reward_mode)
             {
                 case "all":
                     GiveReward_All(player);
@@ -660,7 +662,9 @@ namespace MOTDgd
              * Checking reward mode
              */
 
-            if (Configuration.Instance.Reward_mode.ToLower().Replace(" ", "") != "all" && Configuration.Instance.Reward_mode.ToLower().Replace(" ", "") != "weighted" && Configuration.Instance.Reward_mode.ToLower().Replace(" ", "") != "random" && Configuration.Instance.Reward_mode.ToLower().Replace(" ", "") != "sequential")
+            reward_mode = Configuration.Instance.Reward_mode.ToLower().Replace(" ", "");
+
+            if (reward_mode != "all" && reward_mode != "weighted" && reward_mode != "random" && reward_mode != "sequential")
             {
                 Rocket.Core.Logging.Logger.LogError("Reward mode is not set correctly! Unloading plugin now!");
                 this.Unload();
