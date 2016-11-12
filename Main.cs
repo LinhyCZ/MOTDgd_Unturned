@@ -44,7 +44,7 @@ namespace MOTDgd
         public static bool advanced_logging;
         public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
-        private static string P_version = "2.0.1.1";
+        private static string P_version = "2.0.1.2";
         private Timer cooldownTimer;
         private Timer reminderTimer;
         public static string User_ID;
@@ -244,10 +244,10 @@ namespace MOTDgd
             {
                 foreach (string command in Configuration.Instance.Join_Commands)
                 {
-                    bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), command.Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + ""));
+                    bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
                     if (!success)
                     {
-                        Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
+                        Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
                     }
                 }
             };
@@ -317,7 +317,7 @@ namespace MOTDgd
         {
             foreach (var pair in Reward_dictionary)
             {
-                bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), pair.Key.Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + ""));
+                bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), pair.Key.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
                 if (!success)
                 {
                     Rocket.Core.Logging.Logger.LogError("Failed to execute command " + pair.Key + " while trying to give reward to " + player.DisplayName);
@@ -349,10 +349,10 @@ namespace MOTDgd
                 }
             }
 
-            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Items[sequence_number].Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + ""));
+            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Items[sequence_number].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
             if (!success)
             {
-                Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Items[sequence_number].Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
+                Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Items[sequence_number].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
             }
 
             if (sequence_number >= Reward_dictionary.Keys.Count - 1)
@@ -381,7 +381,7 @@ namespace MOTDgd
             System.Random rnd = new System.Random();
             int r = rnd.Next(Rnd_Items.Count);
 
-            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Rnd_Items[r].Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + ""));
+            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Rnd_Items[r].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
             if (!success)
             {
                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Rnd_Items[r] + " while trying to give reward to " + player.DisplayName);
@@ -401,7 +401,7 @@ namespace MOTDgd
             System.Random rnd = new System.Random();
             int r = rnd.Next(Rnd_Items.Count);
 
-            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Rnd_Items[r].Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + ""));
+            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Rnd_Items[r].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
             if (!success)
             {
                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Rnd_Items[r] + " while trying to give reward to " + player.DisplayName);
@@ -482,10 +482,10 @@ namespace MOTDgd
                     {
                         foreach (string command in Configuration.Instance.Join_Commands)
                         {
-                            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), command.Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + ""));
+                            bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
                             if (!success)
                             {
-                                Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
+                                Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
                             }
                         }
                         KeyValuePair<string, Color> translation = getTranslation("REMINDER_MESSAGE_JOIN").First();
