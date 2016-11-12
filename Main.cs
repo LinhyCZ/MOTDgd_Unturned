@@ -454,7 +454,6 @@ namespace MOTDgd
                 }
                 else
                 {
-                    int remaining_ads = ads_before_cooldown - done_ads;
                     KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName).First();
                     UnturnedChat.Say(translation.Key, translation.Value);
 
