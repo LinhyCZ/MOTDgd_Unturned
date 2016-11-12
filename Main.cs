@@ -4,6 +4,7 @@ using Rocket.API;
 using Rocket.Core.Logging;
 using System.IO;
 using System;
+using System.Linq;
 using Rocket.Unturned;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Chat;
@@ -43,7 +44,7 @@ namespace MOTDgd
         public static bool advanced_logging;
         public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
-        private static string P_version = "2.0.0";
+        private static string P_version = "2.0.1.1";
         private Timer cooldownTimer;
         private Timer reminderTimer;
         public static string User_ID;
@@ -105,11 +106,8 @@ namespace MOTDgd
                         }
                         else
                         {
-                            Dictionary<string, Color> translation = getTranslation("COOLDOWN");
-                            foreach (var translation_pair in translation)
-                            {
-                                UnturnedChat.Say((IRocketPlayer)currentPlayer, translation_pair.Key, translation_pair.Value);
-                            }
+                            KeyValuePair<string, Color> translation = getTranslation("COOLDOWN").First();
+                            UnturnedChat.Say(currentPlayer, translation.Key, translation.Value);
                         }
                     }
                 }
@@ -134,13 +132,9 @@ namespace MOTDgd
                         Awaiting_command.Remove(player.CSteamID);
                     }
 
-                    Dictionary<string, Color> translation = getTranslation("LINK_RESPONSE");
-                    var translated = "Here's your link";
-                    foreach (var translation_pair in translation)
-                    {
-                        translated = translation_pair.Key;
-                    }
-                    player.Player.sendBrowserRequest(translated, link);
+
+                    KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
+                    player.Player.sendBrowserRequest(translation.Key, link);
                 }
                 else
                 {
@@ -167,6 +161,7 @@ namespace MOTDgd
             socket.On("aderror_response", (arguments) =>
             {
                 UnturnedPlayer player = getPlayer(arguments + "");
+
                 if (vid_unavailable)
                 {
                     if (player != null)
@@ -207,15 +202,8 @@ namespace MOTDgd
                 }
                 else
                 {
-                    Dictionary<string, Color> translation = getTranslation("COMPLETED_WITHOUT_VIDEO");
-                    var translated = "Unfortunately we didn't have any video for you, so you can't receive your reward.";
-                    var color = Color.green;
-                    foreach (var translation_pair in translation)
-                    {
-                        translated = translation_pair.Key;
-                        color = translation_pair.Value;
-                    }
-                    UnturnedChat.Say(player, translated, color);                    
+                    KeyValuePair<string, Color> translation = getTranslation("COMPLETED_WITHOUT_VIDEO").First();
+                    UnturnedChat.Say(player, translation.Key, translation.Value);                    
                 }
             });
 
@@ -249,8 +237,8 @@ namespace MOTDgd
 
         private void Connect_event(UnturnedPlayer player)
         {
-            Ad_Views.Add(player.CSteamID, 0);
-            Sequence.Add(player.CSteamID, 0);
+            Ad_Views[player.CSteamID] = 0;
+            Sequence[player.CSteamID] = 0;
 
             if (Configuration.Instance.Join_Commands.Count != 0)
             {
@@ -369,13 +357,11 @@ namespace MOTDgd
 
             if (sequence_number >= Reward_dictionary.Keys.Count - 1)
             {
-                Sequence.Remove(player.CSteamID);
-                Sequence.Add(player.CSteamID, 0);
+                Sequence[player.CSteamID] = 0;
             }
             else
             {
-                Sequence.Remove(player.CSteamID);
-                Sequence.Add(player.CSteamID, sequence_number + 1);
+                Sequence[player.CSteamID] = sequence_number + 1; 
             }
 
             Check_Cooldown(player);
@@ -426,38 +412,30 @@ namespace MOTDgd
 
         public void Check_Cooldown(UnturnedPlayer player)
         {
-            int done_ads;
-            Ad_Views.TryGetValue(player.CSteamID, out done_ads);
+            int done_ads = Ad_Views[player.CSteamID];
 
             if (global_messages == false)
             {
                 if (ads_before_cooldown == 1 || ads_before_cooldown - done_ads == 1)
                 {
-                    Dictionary<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_COOLDOWN", Configuration.Instance.CooldownTime);
-                    foreach (var translation_pair in translation)
-                    {
-                        UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                    }
+                    KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_COOLDOWN", Configuration.Instance.CooldownTime).First();
+                    UnturnedChat.Say((IRocketPlayer)player, translation.Key, translation.Value);
 
                     if (Configuration.Instance.CooldownTime != 0) 
                     {
                         var CooldownTime = CurrentTime.Millis + (Configuration.Instance.CooldownTime * 60 * 1000);
-                        Cooldown.Add(player.CSteamID, CooldownTime);
+                        Cooldown[player.CSteamID] = CooldownTime;
                     }
                 }
                 else
                 {
                     int remaining_ads = ads_before_cooldown - done_ads;
-                    Dictionary<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_REMAIN", remaining_ads);
-                    foreach (var translation_pair in translation)
-                    {
-                        UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                    }
+                    KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_REMAIN", remaining_ads).First();
+                    UnturnedChat.Say((IRocketPlayer)player, translation.Key, translation.Value);
 
                     if (Configuration.Instance.CooldownTime != 0)
                     {
-                        Ad_Views.Remove(player.CSteamID);
-                        Ad_Views.Add(player.CSteamID, done_ads + 1);
+                        Ad_Views[player.CSteamID] = done_ads + 1;
                     }
                 }
             }
@@ -465,31 +443,24 @@ namespace MOTDgd
             {
                 if (ads_before_cooldown == 1 || ads_before_cooldown - done_ads == 1)
                 {
-                    Dictionary<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName);
-                    foreach (var translation_pair in translation)
-                    {
-                        UnturnedChat.Say(translation_pair.Key, translation_pair.Value);
-                    }
+                    KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName).First();
+                    UnturnedChat.Say(translation.Key, translation.Value);
 
                     if (Configuration.Instance.CooldownTime != 0)
                     {
                         var CooldownTime = CurrentTime.Millis + (Configuration.Instance.CooldownTime * 60 * 1000);
-                        Cooldown.Add(player.CSteamID, CooldownTime);
+                        Cooldown[player.CSteamID] = CooldownTime;
                     }
                 }
                 else
                 {
                     int remaining_ads = ads_before_cooldown - done_ads;
-                    Dictionary<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName);
-                    foreach (var translation_pair in translation)
-                    {
-                        UnturnedChat.Say(translation_pair.Key, translation_pair.Value);
-                    }
+                    KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName).First();
+                    UnturnedChat.Say(translation.Key, translation.Value);
 
                     if (Configuration.Instance.CooldownTime != 0)
                     {
-                        Ad_Views.Remove(player.CSteamID);
-                        Ad_Views.Add(player.CSteamID, done_ads + 1);
+                        Ad_Views[player.CSteamID] = done_ads + 1;
                     }
                 }
             }
@@ -518,11 +489,8 @@ namespace MOTDgd
                                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", player.DisplayName.Split(' ')[0]).Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
                             }
                         }
-                        Dictionary<string, Color> translation = getTranslation("REMINDER_MESSAGE_JOIN");
-                        foreach (var translation_pair in translation)
-                        {
-                            UnturnedChat.Say(player, translation_pair.Key, translation_pair.Value);
-                        }
+                        KeyValuePair<string, Color> translation = getTranslation("REMINDER_MESSAGE_JOIN").First();
+                        UnturnedChat.Say(player, translation.Key, translation.Value);
                     }
                 }
             }
@@ -533,11 +501,8 @@ namespace MOTDgd
                     UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steam_player);
                     if (!OnCooldown(player))
                     {
-                        Dictionary<string, Color> translation = getTranslation("REMINDER_MESSAGE");
-                        foreach (var translation_pair in translation)
-                        {
-                            UnturnedChat.Say(player, translation_pair.Key, translation_pair.Value);
-                        }
+                        KeyValuePair<string, Color> translation = getTranslation("REMINDER_MESSAGE").First();
+                        UnturnedChat.Say(player, translation.Key, translation.Value);
                     }
                 }
             }
@@ -555,13 +520,10 @@ namespace MOTDgd
                 if (value <= currentTime)
                 {
                     Cooldown.Remove(key);
-                    Ad_Views.Remove(key);
-                    Ad_Views.Add(key, 0); 
+                    Ad_Views[key] = 0;
                     UnturnedPlayer player = UnturnedPlayer.FromCSteamID(key);
-                    Dictionary<string, Color> translation = getTranslation("COOLDOWN_EXPIRED");
-                    foreach (var translation_pair in translation) {
-                        UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                    }
+                    KeyValuePair<string, Color> translation = getTranslation("COOLDOWN_EXPIRED").First();
+                    UnturnedChat.Say((IRocketPlayer)player, translation.Key, translation.Value);
                 }
             }
         }
@@ -613,14 +575,11 @@ namespace MOTDgd
             socket.Emit("link", new object[] { player.CSteamID + "", GetIP(player) });
             if (!Awaiting_command.ContainsKey(player.CSteamID))
             {
-                Awaiting_command.Add(player.CSteamID, 0);
+                Awaiting_command[player.CSteamID] = 0;
             }
             Request_players.Add(player.CSteamID);
-            Dictionary<string, Color> translation = getTranslation("REQUEST_LINK_MESSAGE");
-            foreach (var translation_pair in translation)
-            {
-                UnturnedChat.Say(player, translation_pair.Key, translation_pair.Value);
-            }
+            KeyValuePair<string, Color> translation = getTranslation("REQUEST_LINK_MESSAGE").First();
+            UnturnedChat.Say(player, translation.Key, translation.Value);
         }
 
         private bool parseConfig()
@@ -634,7 +593,7 @@ namespace MOTDgd
                 string command = reward.Command;
                 int probability = reward.Probability;
 
-                Reward_dictionary.Add(command, probability);
+                Reward_dictionary[command] = probability;
             }
 
             /* 
@@ -686,42 +645,14 @@ namespace MOTDgd
             }
 
             /*
-             * Setting up reminder delay
+             * Other config parsing
              */
 
             reminder_delay = Configuration.Instance.Reminder_delay;
-
-            /*
-             * Setting up global messages 
-             */
-
-            
-
             global_messages = Configuration.Instance.Global_messages;
-
-            /*
-             * Setting up ad on join
-             */
-
-            
             Ad_on_join = Configuration.Instance.Ad_on_join;
-
-            /*
-             * Setting up reapply join command
-             */
-
             reapply_join = Configuration.Instance.Reapply_join_command;
-
-            /*
-             * Setting up reward on not watch
-             */
-
             vid_unavailable = Configuration.Instance.Give_reward_when_video_unavailable;
-
-            /*
-             * Setting up advanced logging
-             */
-
             advanced_logging = Configuration.Instance.AdvancedLogging;
             return true;
         }
@@ -745,7 +676,7 @@ namespace MOTDgd
 
             if (string.IsNullOrEmpty(result))
             {
-                args.Add(identifier, Color.green);
+                args[identifier] = Color.green;
                 return args;
             }
 
@@ -763,7 +694,7 @@ namespace MOTDgd
 
             out_color = UnturnedChat.GetColorFromName(color, Color.green);
             
-            args.Add(result, out_color);
+            args[result] = out_color;
             return args;
         }
 
@@ -799,8 +730,7 @@ namespace MOTDgd
                 }
                 else
                 {
-                    Awaiting_command.Remove(key);
-                    Awaiting_command.Add(key, val + 2);
+                    Awaiting_command[key] = val + 2;
                 }
             }
         }
