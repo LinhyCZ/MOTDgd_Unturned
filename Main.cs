@@ -56,6 +56,7 @@ namespace MOTDgd
         protected override void Load()
         {
             Rocket.Core.Logging.Logger.Log("Loading " + mod_name + " version " + P_version);
+            //Rocket.Core.Logging.Logger.Log("Server IP: " + " Server port: " + Provider.port);
             Instance = this;
             if (!parseConfig()) { return; };
             //Creating socket connection
@@ -745,7 +746,6 @@ namespace MOTDgd
             /*
              * Other config parsing
              */
-
             reminder_delay = Configuration.Instance.Reminder_delay;
             global_messages = Configuration.Instance.Global_messages;
             Ad_on_join = Configuration.Instance.Ad_on_join;
