@@ -33,7 +33,9 @@ namespace MOTDgd
         public static Dictionary<string, int> Reward_dictionary = new Dictionary<string, int>();
         public static Dictionary<CSteamID, int> Sequence = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, int> Awaiting_command = new Dictionary<CSteamID, int>();
+        public static Dictionary<CSteamID, string> Connect_link = new Dictionary<CSteamID, string>();
         public static List<CSteamID> Request_players = new List<CSteamID>();
+        public static List<CSteamID> Connect_awaiting = new List<CSteamID>();
         public static bool cheats = Provider.hasCheats;
         public static int ads_before_cooldown;
         public static int reminder_delay;
@@ -133,14 +135,25 @@ namespace MOTDgd
                 }
                 if (player != null)
                 {
-                    if (Awaiting_command.ContainsKey(player.CSteamID))
+                    if (!Connect_awaiting.Contains(player.CSteamID))
                     {
-                        Awaiting_command.Remove(player.CSteamID);
+                        if (Awaiting_command.ContainsKey(player.CSteamID))
+                        {
+                            Awaiting_command.Remove(player.CSteamID);
+                        }
+
+                        KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
+                        player.Player.sendBrowserRequest(translation.Key, link);
                     }
+                    else
+                    {
+                        if (Awaiting_command.ContainsKey(player.CSteamID))
+                        {
+                            Awaiting_command.Remove(player.CSteamID);
+                        }
 
-
-                    KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
-                    player.Player.sendBrowserRequest(translation.Key, link);
+                        Connect_link.Add(player.CSteamID, link);
+                    }
                 }
                 else
                 {
@@ -221,6 +234,8 @@ namespace MOTDgd
             //Telling player about rewards
             U.Events.OnPlayerConnected += Connect_event;
             U.Events.OnPlayerDisconnected += Disconnect_event;
+            Rocket.Unturned.Events.UnturnedPlayerEvents.OnPlayerUpdatePosition += UnturnedPlayerEvents_OnPlayerUpdatePosition;
+
 
 
             //Timer checking Cooldown players
@@ -238,18 +253,34 @@ namespace MOTDgd
             }
         }
 
+        private void UnturnedPlayerEvents_OnPlayerUpdatePosition(UnturnedPlayer player, Vector3 position)
+        {
+            if (Connect_link.ContainsKey(player.CSteamID))
+            {
+                KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
+                player.Player.sendBrowserRequest(translation.Key, Connect_link[player.CSteamID]);
+                Connect_link.Remove(player.CSteamID);
+            }
+        }
+
         private void Disconnect_event(UnturnedPlayer player)
         {
-            Ad_Views.Remove(player.CSteamID);
-            Sequence.Remove(player.CSteamID);
             Awaiting_command.Remove(player.CSteamID);
-            Sequence.Remove(player.CSteamID);
+            Connect_link.Remove(player.CSteamID);
+            Connect_awaiting.Remove(player.CSteamID);
         }
 
         private void Connect_event(UnturnedPlayer player)
         {
-            Ad_Views[player.CSteamID] = 0;
-            Sequence[player.CSteamID] = 0;
+            if (!Ad_Views.ContainsKey(player.CSteamID))
+            {
+                Ad_Views[player.CSteamID] = 0;
+            }
+
+            if (!Sequence.ContainsKey(player.CSteamID))
+            {
+                Sequence[player.CSteamID] = 0;
+            }
 
             if (Configuration.Instance.Join_Commands.Count != 0)
             {
@@ -275,6 +306,7 @@ namespace MOTDgd
 
             if (Connected && !OnCooldown(player) && Ad_on_join)
             {
+                Connect_awaiting.Add(player.CSteamID);
                 request_link(player);
             }
         }
@@ -300,6 +332,8 @@ namespace MOTDgd
             Reward_dictionary.Clear();
             Sequence.Clear();
             Cooldown.Clear();
+            Connect_link.Clear();
+            Connect_awaiting.Clear();
         }
 
 
