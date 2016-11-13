@@ -34,6 +34,7 @@ namespace MOTDgd
         public static Dictionary<CSteamID, int> Sequence = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, int> Awaiting_command = new Dictionary<CSteamID, int>();
         public static List<CSteamID> Request_players = new List<CSteamID>();
+        public static bool cheats = Provider.hasCheats;
         public static int ads_before_cooldown;
         public static int reminder_delay;
         public static int cooldown_delay;
@@ -44,7 +45,7 @@ namespace MOTDgd
         public static bool advanced_logging;
         public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
-        private static string P_version = "2.0.1.2";
+        private static string P_version = "2.0.1.3";
         private Timer cooldownTimer;
         private Timer reminderTimer;
         public static string User_ID;
@@ -125,6 +126,10 @@ namespace MOTDgd
                 string message = Response["msg"];
 
                 UnturnedPlayer player = getPlayer(pid);
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("Received link for player " + player.DisplayName + " with CSteamID " + pid);
+                }
                 if (player != null)
                 {
                     if (Awaiting_command.ContainsKey(player.CSteamID))
@@ -202,6 +207,11 @@ namespace MOTDgd
                 }
                 else
                 {
+                    if (advanced_logging)
+                    {
+                        Rocket.Core.Logging.Logger.Log(player.DisplayName + " havenhad trouble wathching video");
+                    }
+
                     KeyValuePair<string, Color> translation = getTranslation("COMPLETED_WITHOUT_VIDEO").First();
                     UnturnedChat.Say(player, translation.Key, translation.Value);                    
                 }
@@ -244,7 +254,17 @@ namespace MOTDgd
             {
                 foreach (string command in Configuration.Instance.Join_Commands)
                 {
+                    if (!cheats) {
+                        Provider.hasCheats = true;
+                    }
+
                     bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+
+                    if (!cheats)
+                    {
+                        Provider.hasCheats = false;
+                    }
+
                     if (!success)
                     {
                         Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
@@ -317,7 +337,23 @@ namespace MOTDgd
         {
             foreach (var pair in Reward_dictionary)
             {
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("Executing " + pair.Key.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+                }
+
+                if (!cheats)
+                {
+                    Provider.hasCheats = true;
+                }
+
                 bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), pair.Key.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+
+                if (!cheats)
+                {
+                    Provider.hasCheats = false;
+                }
+
                 if (!success)
                 {
                     Rocket.Core.Logging.Logger.LogError("Failed to execute command " + pair.Key + " while trying to give reward to " + player.DisplayName);
@@ -349,7 +385,23 @@ namespace MOTDgd
                 }
             }
 
+            if (advanced_logging)
+            {
+                Rocket.Core.Logging.Logger.Log("Executing " + Items[sequence_number].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+            }
+
+            if (!cheats)
+            {
+                Provider.hasCheats = true;
+            }
+            
             bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Items[sequence_number].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+
+            if (!cheats)
+            {
+                Provider.hasCheats = false;
+            }
+
             if (!success)
             {
                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Items[sequence_number].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
@@ -381,7 +433,23 @@ namespace MOTDgd
             System.Random rnd = new System.Random();
             int r = rnd.Next(Rnd_Items.Count);
 
+            if (advanced_logging)
+            {
+                Rocket.Core.Logging.Logger.Log("Executing " + Rnd_Items[r].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+            }
+
+            if (!cheats)
+            {
+                Provider.hasCheats = true;
+            }
+
             bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Rnd_Items[r].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+
+            if (!cheats)
+            {
+                Provider.hasCheats = false;
+            }
+
             if (!success)
             {
                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Rnd_Items[r] + " while trying to give reward to " + player.DisplayName);
@@ -401,7 +469,23 @@ namespace MOTDgd
             System.Random rnd = new System.Random();
             int r = rnd.Next(Rnd_Items.Count);
 
+            if (advanced_logging)
+            {
+                Rocket.Core.Logging.Logger.Log("Executing " + Rnd_Items[r].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+            }
+
+            if (!cheats)
+            {
+                Provider.hasCheats = true;
+            }
+
             bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), Rnd_Items[r].Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+
+            if (!cheats)
+            {
+                Provider.hasCheats = false;
+            }
+
             if (!success)
             {
                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + Rnd_Items[r] + " while trying to give reward to " + player.DisplayName);
@@ -482,7 +566,18 @@ namespace MOTDgd
                     {
                         foreach (string command in Configuration.Instance.Join_Commands)
                         {
+                            if (!cheats)
+                            {
+                                Provider.hasCheats = true;
+                            }
+
                             bool success = R.Commands.Execute((IRocketPlayer)UnturnedPlayer.FromCSteamID(Executor_ID), command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + ""));
+
+                            if (!cheats)
+                            {
+                                Provider.hasCheats = false;
+                            }
+
                             if (!success)
                             {
                                 Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", "\"" + player.DisplayName + "\"").Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
@@ -572,6 +667,10 @@ namespace MOTDgd
 
         public static void request_link(UnturnedPlayer player) {
             socket.Emit("link", new object[] { player.CSteamID + "", GetIP(player) });
+            if (advanced_logging)
+            {
+                Rocket.Core.Logging.Logger.Log("Requesting ad link for player " + player.DisplayName + " with CSteamID " + player.CSteamID + " and IP " + GetIP(player));
+            }
             if (!Awaiting_command.ContainsKey(player.CSteamID))
             {
                 Awaiting_command[player.CSteamID] = 0;
