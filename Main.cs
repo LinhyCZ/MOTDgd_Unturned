@@ -62,6 +62,7 @@ namespace MOTDgd
             Instance = this;
             if (!parseConfig()) { return; };
             //Creating socket connection
+            //socket = IO.Socket("http://hub.motdgd.com");
             socket = IO.Socket("http://mcnode.motdgd.com:8080");
             Rocket.Core.Logging.Logger.Log("Connecting to HUB");
 
@@ -152,6 +153,10 @@ namespace MOTDgd
                             Awaiting_command.Remove(player.CSteamID);
                         }
 
+                        if (advanced_logging)
+                        {
+                            Rocket.Core.Logging.Logger.Log("Received link on login for player " + player.DisplayName + " - link = " + link.Substring(0,15) + "...");
+                        }
                         Connect_link.Add(player.CSteamID, link);
                     }
                 }
@@ -257,6 +262,10 @@ namespace MOTDgd
         {
             if (Connect_link.ContainsKey(player.CSteamID))
             {
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("Player " + player + " moved. Sending link " + Connect_link[player.CSteamID].Substring(0, 15) + "...");
+                }
                 KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
                 player.Player.sendBrowserRequest(translation.Key, Connect_link[player.CSteamID]);
                 Connect_link.Remove(player.CSteamID);
@@ -307,6 +316,10 @@ namespace MOTDgd
             if (Connected && !OnCooldown(player) && Ad_on_join)
             {
                 Connect_awaiting.Add(player.CSteamID);
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("Adding player " + player.DisplayName + " to link on connect queue.");
+                }
                 request_link(player);
             }
         }
