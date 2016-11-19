@@ -47,7 +47,7 @@ namespace MOTDgd
         public static bool advanced_logging;
         public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
-        private static string P_version = "2.0.1.4";
+        private static string P_version = "2.0.2.0";
         private Timer cooldownTimer;
         private Timer reminderTimer;
         public static string User_ID;
@@ -158,6 +158,7 @@ namespace MOTDgd
                             Rocket.Core.Logging.Logger.Log("Received link on login for player " + player.DisplayName + " - link = " + link.Substring(0,15) + "...");
                         }
                         Connect_link.Add(player.CSteamID, link);
+                        Connect_awaiting.Remove(player.CSteamID);
                     }
                 }
                 else
@@ -228,7 +229,7 @@ namespace MOTDgd
                 {
                     if (advanced_logging)
                     {
-                        Rocket.Core.Logging.Logger.Log(player.DisplayName + " havenhad trouble wathching video");
+                        Rocket.Core.Logging.Logger.Log(player.DisplayName + " have had trouble wathching video");
                     }
 
                     KeyValuePair<string, Color> translation = getTranslation("COMPLETED_WITHOUT_VIDEO").First();
@@ -291,7 +292,7 @@ namespace MOTDgd
                 Sequence[player.CSteamID] = 0;
             }
 
-            if (Configuration.Instance.Join_Commands.Count != 0)
+            if (Configuration.Instance.Join_Commands.Count != 0 && !player.HasPermission("motdgd.immune"))
             {
                 foreach (string command in Configuration.Instance.Join_Commands)
                 {
@@ -313,7 +314,7 @@ namespace MOTDgd
                 }
             };
 
-            if (Connected && !OnCooldown(player) && Ad_on_join)
+            if (Connected && !OnCooldown(player) && Ad_on_join && !player.HasPermission("motdgd.immune"))
             {
                 Connect_awaiting.Add(player.CSteamID);
                 if (advanced_logging)
@@ -335,6 +336,8 @@ namespace MOTDgd
                 cooldownTimer.Enabled = false;
             }
             U.Events.OnPlayerConnected -= Connect_event;
+            U.Events.OnPlayerDisconnected -= Disconnect_event;
+            Rocket.Unturned.Events.UnturnedPlayerEvents.OnPlayerUpdatePosition -= UnturnedPlayerEvents_OnPlayerUpdatePosition;
             if (socket != null)
             {
                 socket.Disconnect();
@@ -620,7 +623,7 @@ namespace MOTDgd
                 foreach (SteamPlayer steamplayer in Provider.clients)
                 {
                     UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steamplayer);
-                    if (!OnCooldown(player))
+                    if (!OnCooldown(player) && !player.HasPermission("motdgd.immune"))
                     {
                         foreach (string command in Configuration.Instance.Join_Commands)
                         {
@@ -651,7 +654,7 @@ namespace MOTDgd
                 foreach (SteamPlayer steam_player in Provider.clients)
                 {
                     UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steam_player);
-                    if (!OnCooldown(player))
+                    if (!OnCooldown(player) && !player.HasPermission("motdgd.immune"))
                     {
                         KeyValuePair<string, Color> translation = getTranslation("REMINDER_MESSAGE").First();
                         UnturnedChat.Say(player, translation.Key, translation.Value);
