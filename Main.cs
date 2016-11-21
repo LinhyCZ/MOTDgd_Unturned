@@ -47,7 +47,7 @@ namespace MOTDgd
         public static bool advanced_logging;
         public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
-        private static string P_version = "2.0.2.0";
+        private static string P_version = "2.0.3.0";
         private Timer cooldownTimer;
         private Timer reminderTimer;
         public static string User_ID;
