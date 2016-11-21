@@ -336,7 +336,7 @@ namespace MOTDgd
         {
             get
             {
-                return "<ALL | SEQUENTIAL | RANDOM | WEIGHTED>";
+                return "setmode <ALL | SEQUENTIAL | RANDOM | WEIGHTED>";
             }
         }
 
@@ -428,7 +428,7 @@ namespace MOTDgd
         {
             get
             {
-                return "<player>";
+                return "givereward <player>";
             }
         }
 
