@@ -62,8 +62,8 @@ namespace MOTDgd
             Instance = this;
             if (!parseConfig()) { return; };
             //Creating socket connection
-            //socket = IO.Socket("http://hub.motdgd.com");
-            socket = IO.Socket("http://mcnode.motdgd.com:8080");
+            socket = IO.Socket("http://hub.motdgd.com");
+            //socket = IO.Socket("http://mcnode.motdgd.com:8080");
             Rocket.Core.Logging.Logger.Log("Connecting to HUB");
 
             //Logging in to node
