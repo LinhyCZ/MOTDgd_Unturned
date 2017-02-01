@@ -1,11 +1,8 @@
 ﻿using Rocket.API;
-using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
-using System;
+using Steamworks;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
@@ -271,7 +268,6 @@ namespace MOTDgd
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
             if (command.Length == 1)
             {
                 UnturnedPlayer remPlayer = UnturnedPlayer.FromName(command[0]);
@@ -288,12 +284,13 @@ namespace MOTDgd
             }
             else
             {
-                if(caller == null)
+                if(caller.ToString() == "Rocket.API.ConsolePlayer")
                 {
                     Rocket.Core.Logging.Logger.Log("Wrong syntax of command");
                 }
                 else
                 {
+                    UnturnedPlayer player = (UnturnedPlayer)caller;
                     UnturnedChat.Say(player, "Wrong syntax of command");
                 }
             }
@@ -350,7 +347,6 @@ namespace MOTDgd
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
             if (command.Length == 1)
             {
                 switch (command[0].ToLower())
@@ -368,12 +364,13 @@ namespace MOTDgd
                         Main.reward_mode = "random";
                         break;
                     default:
-                        if (caller == null)
+                        if (caller.ToString() == "Rocket.API.ConsolePlayer")
                         {
                             Rocket.Core.Logging.Logger.Log("Didn't recognize " + command[0] + " as valid reward mode.");
                         }
                         else
                         {
+                            UnturnedPlayer player = (UnturnedPlayer)caller;
                             UnturnedChat.Say(player, "Didn't recognize " + command[0] + " as valid reward mode.");
                         }
                         break;
@@ -381,12 +378,13 @@ namespace MOTDgd
             }
             else
             {
-                if (caller == null)
+                if (caller.ToString() == "Rocket.API.ConsolePlayer")
                 {
                     Rocket.Core.Logging.Logger.Log("Wrong syntax of command");
                 }
                 else
                 {
+                    UnturnedPlayer player = (UnturnedPlayer)caller;
                     UnturnedChat.Say(player, "Wrong syntax of command");
                 }
             }
@@ -442,7 +440,6 @@ namespace MOTDgd
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
             if (command.Length == 1)
             {
                 UnturnedPlayer rew_player = UnturnedPlayer.FromName(command[0]);
@@ -453,24 +450,26 @@ namespace MOTDgd
                 }
                 else
                 {
-                    if (caller == null)
+                    if (caller.ToString() == "Rocket.API.ConsolePlayer")
                     {
                         Rocket.Core.Logging.Logger.Log("Cannot find player with name " + command[0]);
                     }
                     else
                     {
+                        UnturnedPlayer player = (UnturnedPlayer)caller;
                         UnturnedChat.Say(player, "Cannot find player with name " + command[0]);
                     }
                 }
             }
             else
             {
-                if (caller == null)
+                if (caller.ToString() == "Rocket.API.ConsolePlayer")
                 {
                     Rocket.Core.Logging.Logger.Log("Wrong syntax of command");
                 }
                 else
                 {
+                    UnturnedPlayer player = (UnturnedPlayer)caller;
                     UnturnedChat.Say(player, "Wrong syntax of command");
                 }
             }

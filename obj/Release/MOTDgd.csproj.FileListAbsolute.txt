@@ -10,3 +10,16 @@ C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\Ro
 C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\bin\Release\UnityEngine.dll
 C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\obj\Release\MOTDgd.dll
 C:\Users\Alex\Documents\Visual Studio 2015\Projects\MOTDgd\MOTDgd\obj\Release\MOTDgd.pdb
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\MOTDgd.dll.config
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\MOTDgd.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\MOTDgd.pdb
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\EngineIoClientDotNet.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\Newtonsoft.Json.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\SocketIoClientDotNet.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\System.Threading.Tasks.NET35.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\WebSocket4Net.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\obj\Release\MOTDgd.csprojResolveAssemblyReference.cache
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\obj\Release\MOTDgd.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\obj\Release\MOTDgd.pdb
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\System.Runtime.Serialization.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Release\System.Xml.Linq.dll

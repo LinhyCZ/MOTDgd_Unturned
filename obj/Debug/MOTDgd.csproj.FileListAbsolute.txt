@@ -31,3 +31,5 @@ C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\SocketIoClientDotNet.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\System.Threading.Tasks.NET35.dll
 C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\WebSocket4Net.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\System.Xml.Linq.dll
+C:\Users\Tomáš\Visual Studio\MOTDgd\MOTDgd\bin\Debug\System.Runtime.Serialization.dll
