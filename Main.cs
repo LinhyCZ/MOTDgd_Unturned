@@ -41,7 +41,7 @@ namespace MOTDgd
         public static bool advanced_logging;
         public static string reward_mode;
         private static string mod_name = "MOTDgdCommandAd for Unturned";
-        private static string P_version = "2.0.3.1";
+        private static string P_version = "2.0.3.2";
         private Timer cooldownTimer;
         private Timer reminderTimer;
         public static string User_ID;
@@ -732,19 +732,23 @@ namespace MOTDgd
         {
             try
             {
-                foreach (var pair in Cooldown)
+                List<CSteamID> keys = new List<CSteamID>(Cooldown.Keys);
+                foreach (var key in keys)
                 {
-                    var key = pair.Key;
-                    var value = pair.Value;
+                    var value = Cooldown[key];
                     var currentTime = CurrentTime.Millis;
 
                     if (value <= currentTime)
                     {
                         Cooldown.Remove(key);
                         Ad_Views[key] = 0;
-                        UnturnedPlayer player = UnturnedPlayer.FromCSteamID(key);
-                        KeyValuePair<string, Color> translation = getTranslation("COOLDOWN_EXPIRED").First();
-                        UnturnedChat.Say((IRocketPlayer)player, translation.Key, translation.Value);
+                        
+                        if (Provider.clients.Contains(PlayerTool.getSteamPlayer(key)))
+                        {
+                            UnturnedPlayer player = UnturnedPlayer.FromCSteamID(key);
+                            KeyValuePair<string, Color> translation = getTranslation("COOLDOWN_EXPIRED").First();
+                            UnturnedChat.Say(player, translation.Key, translation.Value);
+                        }
                     }
                 }
             }
