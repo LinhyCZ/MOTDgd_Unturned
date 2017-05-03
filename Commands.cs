@@ -70,11 +70,7 @@ namespace MOTDgd
             }
             else if (Main.OnCooldown(player))
             {
-                Dictionary<string, Color> translation = Main.getTranslation("COOLDOWN");
-                foreach (var translation_pair in translation)
-                {
-                    UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                }
+                UnturnedChat.Say((IRocketPlayer)player, Main.Translation_dictionary["COOLDOWN"].Key, Main.Translation_dictionary["COOLDOWN"].Value);
             }
             else if (Main.Connected == false)
             {
@@ -146,19 +142,11 @@ namespace MOTDgd
             var data = Main.CooldownTime(player);
             if (data != "")
             {
-                Dictionary<string, Color> translation = Main.getTranslation("COOLDOWN_REMAINING", data);
-                foreach (var translation_pair in translation)
-                {
-                    UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                }
+                UnturnedChat.Say((IRocketPlayer)player, Main.setTranslationParams(Main.Translation_dictionary["COOLDOWN_REMAINING"].Key, data), Main.Translation_dictionary["COOLDOWN_REMAINING"].Value);
             }
             else
             {
-                Dictionary<string, Color> translation = Main.getTranslation("NOT_ON_COOLDOWN");
-                foreach (var translation_pair in translation)
-                {
-                    UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                }
+                UnturnedChat.Say((IRocketPlayer)player, Main.Translation_dictionary["NOT_ON_COOLDOWN"].Key, Main.Translation_dictionary["NOT_ON_COOLDOWN"].Value);
             }
         }
     }

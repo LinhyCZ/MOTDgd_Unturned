@@ -25,6 +25,7 @@ namespace MOTDgd
         public static Dictionary<CSteamID, int> Ad_Views = new Dictionary<CSteamID,int>();
         public static Dictionary<CSteamID, long> Cooldown = new Dictionary<CSteamID, long>();
         public static Dictionary<string, int> Reward_dictionary = new Dictionary<string, int>();
+        public static Dictionary<string, KeyValuePair<string, Color>> Translation_dictionary = new Dictionary<string, KeyValuePair<string, Color>>();
         public static Dictionary<CSteamID, int> Sequence = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, int> Awaiting_command = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, string> Connect_link = new Dictionary<CSteamID, string>();
@@ -105,8 +106,7 @@ namespace MOTDgd
                             }
                             else
                             {
-                                KeyValuePair<string, Color> translation = getTranslation("COOLDOWN").First();
-                                UnturnedChat.Say(currentPlayer, translation.Key, translation.Value);
+                                UnturnedChat.Say(currentPlayer, Translation_dictionary["COOLDOWN"].Key, Translation_dictionary["COOLDOWN"].Value);
                             }
                         }
                     }
@@ -136,9 +136,8 @@ namespace MOTDgd
                             {
                                 Awaiting_command.Remove(player.CSteamID);
                             }
-
-                            KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
-                            player.Player.sendBrowserRequest(translation.Key, link);
+                            
+                            player.Player.sendBrowserRequest(Translation_dictionary["LINK_RESPONSE"].Key, link);
                         }
                         else
                         {
@@ -206,11 +205,7 @@ namespace MOTDgd
                                 }
                                 else
                                 {
-                                    Dictionary<string, Color> translation = getTranslation("COOLDOWN");
-                                    foreach (var translation_pair in translation)
-                                    {
-                                        UnturnedChat.Say((IRocketPlayer)player, translation_pair.Key, translation_pair.Value);
-                                    }
+                                    UnturnedChat.Say((IRocketPlayer)player, Translation_dictionary["COOLDOWN"].Key, Translation_dictionary["COOLDOWN"].Value);
                                 }
                             }
                         }
@@ -225,9 +220,8 @@ namespace MOTDgd
                         {
                             Rocket.Core.Logging.Logger.Log(player.DisplayName + " had trouble wathching video");
                         }
-
-                        KeyValuePair<string, Color> translation = getTranslation("COMPLETED_WITHOUT_VIDEO").First();
-                        UnturnedChat.Say(player, translation.Key, translation.Value);
+                        
+                        UnturnedChat.Say(player, Translation_dictionary["COMPLETED_WITHOUT_VIDEO"].Key, Translation_dictionary["COMPLETED_WITHOUT_VIDEO"].Value);
                     }
                 });
 
@@ -268,8 +262,7 @@ namespace MOTDgd
                     {
                         Rocket.Core.Logging.Logger.Log("Player " + player + " moved. Sending link " + Connect_link[player.CSteamID].Substring(0, 15) + "...");
                     }
-                    KeyValuePair<string, Color> translation = getTranslation("LINK_RESPONSE").First();
-                    player.Player.sendBrowserRequest(translation.Key, Connect_link[player.CSteamID]);
+                    player.Player.sendBrowserRequest(Translation_dictionary["LINK_RESPONSE"].Key, Connect_link[player.CSteamID]);
                     Connect_link.Remove(player.CSteamID);
                 }
             }
@@ -615,8 +608,7 @@ namespace MOTDgd
                 {
                     if (ads_before_cooldown == 1 || ads_before_cooldown - done_ads == 1)
                     {
-                        KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_COOLDOWN", Configuration.Instance.CooldownTime).First();
-                        UnturnedChat.Say((IRocketPlayer)player, translation.Key, translation.Value);
+                        UnturnedChat.Say((IRocketPlayer)player, setTranslationParams(Translation_dictionary["EVENT_RECEIVED_REWARD_COOLDOWN"].Key, Configuration.Instance.CooldownTime) , Translation_dictionary["EVENT_RECEIVED_REWARD_COOLDOWN"].Value);
 
                         if (Configuration.Instance.CooldownTime != 0)
                         {
@@ -627,8 +619,7 @@ namespace MOTDgd
                     else
                     {
                         int remaining_ads = ads_before_cooldown - done_ads;
-                        KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_REMAIN", remaining_ads).First();
-                        UnturnedChat.Say((IRocketPlayer)player, translation.Key, translation.Value);
+                        UnturnedChat.Say((IRocketPlayer)player, setTranslationParams(Translation_dictionary["EVENT_RECEIVED_REWARD_ADS_REMAIN"].Key, remaining_ads), Translation_dictionary["EVENT_RECEIVED_REWARD_ADS_REMAIN"].Value);
 
                         if (Configuration.Instance.CooldownTime != 0)
                         {
@@ -640,8 +631,7 @@ namespace MOTDgd
                 {
                     if (ads_before_cooldown == 1 || ads_before_cooldown - done_ads == 1)
                     {
-                        KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName).First();
-                        UnturnedChat.Say(translation.Key, translation.Value);
+                        UnturnedChat.Say(setTranslationParams(Translation_dictionary["EVENT_RECEIVED_REWARD_ADS_GLOBAL"].Key, player.DisplayName), Translation_dictionary["EVENT_RECEIVED_REWARD_ADS_GLOBAL"].Value);
 
                         if (Configuration.Instance.CooldownTime != 0)
                         {
@@ -651,8 +641,7 @@ namespace MOTDgd
                     }
                     else
                     {
-                        KeyValuePair<string, Color> translation = getTranslation("EVENT_RECEIVED_REWARD_ADS_GLOBAL", player.DisplayName).First();
-                        UnturnedChat.Say(translation.Key, translation.Value);
+                        UnturnedChat.Say(setTranslationParams(Translation_dictionary["EVENT_RECEIVED_REWARD_ADS_GLOBAL"].Key, player.DisplayName), Translation_dictionary["EVENT_RECEIVED_REWARD_ADS_GLOBAL"].Value);
 
                         if (Configuration.Instance.CooldownTime != 0)
                         {
@@ -703,8 +692,7 @@ namespace MOTDgd
                                     Rocket.Core.Logging.Logger.LogError("Failed to execute command " + command.Replace("(player)", player.DisplayName).Replace("(steamid)", player.CSteamID + "") + " while trying to give reward to " + player.DisplayName);
                                 }
                             }
-                            KeyValuePair<string, Color> translation = getTranslation("REMINDER_MESSAGE_JOIN").First();
-                            UnturnedChat.Say(player, translation.Key, translation.Value);
+                            UnturnedChat.Say(player, Translation_dictionary["REMINDER_MESSAGE_JOIN"].Key, Translation_dictionary["REMINDER_MESSAGE_JOIN"].Value);
                         }
                     }
                 }
@@ -715,8 +703,7 @@ namespace MOTDgd
                         UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steam_player);
                         if (!OnCooldown(player) && !player.HasPermission("motdgd.immune"))
                         {
-                            KeyValuePair<string, Color> translation = getTranslation("REMINDER_MESSAGE").First();
-                            UnturnedChat.Say(player, translation.Key, translation.Value);
+                            UnturnedChat.Say(player, Translation_dictionary["REMINDER_MESSAGE"].Key, Translation_dictionary["REMINDER_MESSAGE"].Value);
                         }
                     }
                 }
@@ -746,8 +733,7 @@ namespace MOTDgd
                         if (Provider.clients.Contains(PlayerTool.getSteamPlayer(key)))
                         {
                             UnturnedPlayer player = UnturnedPlayer.FromCSteamID(key);
-                            KeyValuePair<string, Color> translation = getTranslation("COOLDOWN_EXPIRED").First();
-                            UnturnedChat.Say(player, translation.Key, translation.Value);
+                            UnturnedChat.Say(player, Translation_dictionary["COOLDOWN_EXPIRED"].Key, Translation_dictionary["COOLDOWN_EXPIRED"].Value);
                         }
                     }
                 }
@@ -822,8 +808,7 @@ namespace MOTDgd
                     Awaiting_command[player.CSteamID] = 0;
                 }
                 Request_players.Add(player.CSteamID);
-                KeyValuePair<string, Color> translation = getTranslation("REQUEST_LINK_MESSAGE").First();
-                UnturnedChat.Say(player, translation.Key, translation.Value);
+                UnturnedChat.Say(player, Translation_dictionary["REQUEST_LINK_MESSAGE"].Key, Translation_dictionary["REQUEST_LINK_MESSAGE"].Value);
             }
             catch (Exception e)
             {
@@ -833,7 +818,22 @@ namespace MOTDgd
 
         private bool parseConfig()
         {
-            try {
+            try
+            {
+                advanced_logging = Configuration.Instance.AdvancedLogging;
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("*****************************");
+                    Rocket.Core.Logging.Logger.Log("*                           *");
+                    Rocket.Core.Logging.Logger.Log("*   Parsing MOTDGD config   *");
+                    Rocket.Core.Logging.Logger.Log("*                           *");
+                    Rocket.Core.Logging.Logger.Log("*****************************");
+                    Rocket.Core.Logging.Logger.Log("");
+                    Rocket.Core.Logging.Logger.Log("*******************");
+                    Rocket.Core.Logging.Logger.Log("* Loading rewards *");
+                    Rocket.Core.Logging.Logger.Log("*******************");
+                    Rocket.Core.Logging.Logger.Log("");
+                }    
             /*
              * Parsing rewards to dictionary
              */
@@ -844,6 +844,38 @@ namespace MOTDgd
                     int probability = reward.Probability;
 
                     Reward_dictionary[command] = probability;
+
+                    if (advanced_logging)
+                    {
+                        Rocket.Core.Logging.Logger.Log("Loaded reward " + command + " with probability " + probability);
+                    }
+                }
+
+                /*
+                 * Parse translations from the config
+                 */
+
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("");
+                    Rocket.Core.Logging.Logger.Log("************************");
+                    Rocket.Core.Logging.Logger.Log("* Loading translations *");
+                    Rocket.Core.Logging.Logger.Log("************************");
+                    Rocket.Core.Logging.Logger.Log("");
+                }
+                for (int lastIndex = 0; lastIndex < Main.Instance.Configuration.Instance.Translations.Length; lastIndex++) 
+                {
+                    MOTDgd.MOTDgdConfiguration.Translation translation_object = Main.Instance.Configuration.Instance.Translations[lastIndex]; //get current translation
+                    Color color = UnturnedChat.GetColorFromName(translation_object.Color, Color.green);
+                    string translation = translation_object.Text; //Get translation from config
+                    string identifier = translation_object.Identifier;
+
+                    Translation_dictionary[identifier] = new KeyValuePair<string, Color>(translation, color);
+
+                    if(advanced_logging)
+                    {
+                        Rocket.Core.Logging.Logger.Log("Loaded translation " + identifier + " with value " + translation + " and color " + translation_object.Color);
+                    }
                 }
 
                 /* 
@@ -902,7 +934,14 @@ namespace MOTDgd
                 Ad_on_join = Configuration.Instance.Ad_on_join;
                 reapply_join = Configuration.Instance.Reapply_join_command;
                 vid_unavailable = Configuration.Instance.Give_reward_when_video_unavailable;
-                advanced_logging = Configuration.Instance.AdvancedLogging;
+                if (advanced_logging)
+                {
+                    Rocket.Core.Logging.Logger.Log("");
+                    Rocket.Core.Logging.Logger.Log("***********************");
+                    Rocket.Core.Logging.Logger.Log("* Loaded successfully *");
+                    Rocket.Core.Logging.Logger.Log("***********************");
+                    Rocket.Core.Logging.Logger.Log("");
+                }
                 return true;
             }
             catch (Exception e)
@@ -912,52 +951,26 @@ namespace MOTDgd
             }
         }
         
-        public static Dictionary<string, Color> getTranslation(string identifier, params object[] parameters) {
+        public static string setTranslationParams(string translation, params object[] parameters) {
             try
             {
-                string color = "";
-                string result = "";
-                Color out_color;
-                Dictionary<string, Color> args = new Dictionary<string, Color>();
-
-                for (int lastIndex = 0; lastIndex < Main.Instance.Configuration.Instance.Translations.Length; lastIndex++)
-                {
-                    MOTDgd.MOTDgdConfiguration.Translation translation_object = Main.Instance.Configuration.Instance.Translations[lastIndex];
-                    if (translation_object.Identifier.ToLower() == identifier.ToLower())
-                    {
-                        color = translation_object.Color;
-                        result = translation_object.Text;
-                        lastIndex = Main.Instance.Configuration.Instance.Translations.Length + 10;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(result))
-                {
-                    args[identifier] = Color.green;
-                    return args;
-                }
-
-                if (result.Contains("{") && result.Contains("}") && parameters != null && (int)parameters.Length != 0)
+                if (translation.Contains("{") && translation.Contains("}") && parameters != null && (int)parameters.Length != 0) //Replace parameters e.g. {0}
                 {
                     for (int i = 0; i < (int)parameters.Length; i++)
                     {
                         if (parameters[i] == null)
                         {
-                            parameters[i] = "NULL";
+                            parameters[i] = "NULL"; //Change null parameter to string
                         }
                     }
-                    result = string.Format(result, parameters);
+                    translation = string.Format(translation, parameters); //Format the string
                 }
-
-                out_color = UnturnedChat.GetColorFromName(color, Color.green);
-
-                args[result] = out_color;
-                return args;
+                return translation; //And return
             }
             catch (Exception e)
             {
                 Rocket.Core.Logging.Logger.LogException(e);
-                return new Dictionary<string, Color>();
+                return string.Empty;
             }
         }
 
